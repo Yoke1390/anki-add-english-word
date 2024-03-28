@@ -21,8 +21,8 @@ export default function Command() {
   const fromLangObj = supportedLanguagesByCode[langFrom];
   const toLangObj = supportedLanguagesByCode[langTo];
 
-  const [text, setText] = useTextState();
-  const debouncedValue = useDebouncedValue(text, 500);
+  const [selected_text, setText] = useTextState();
+  const debouncedValue = useDebouncedValue(selected_text, 500);
   const { data: translated, isLoading } = usePromise(
     simpleTranslate,
     [debouncedValue, { langFrom: fromLangObj.code, langTo: toLangObj.code }],
@@ -67,6 +67,7 @@ export default function Command() {
     >
       <Form.TextField id="word" title="Word" placeholder="Enter a word" />
       <Form.TextArea id="sentence" title="Sentence" placeholder="Enter a sentence including the word."
+        value={selected_text}
         onChange={handleSentenceChange}
       />
       <Form.Separator />
@@ -95,6 +96,8 @@ function addAnkiCard(front: string, back: string, deck: string) {
                 "tags": [],
             }
         },
+        "options": {"allowDuplicate": true,
+                    "duplicateScope": "deck"}
     }
 
     console.log(request);
